@@ -8,7 +8,9 @@ export default class Table extends React.Component {
         columns: React.PropTypes.array.isRequired,
         sort: React.PropTypes.object,
         sortAsc: React.PropTypes.bool,
-        onSort: React.PropTypes.func
+        onSort: React.PropTypes.func,
+        width: React.PropTypes.string,
+        height: React.PropTypes.string
     };
     static defaultProps = {
         onSort: function(i) {}
@@ -16,7 +18,10 @@ export default class Table extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            headerWidth: []
+            headerWidth: [],
+            tableContainer: 0,
+            fixedHeader: 0,
+            scrollContent: 0
         }
     }
     componentDidMount() {
@@ -28,7 +33,12 @@ export default class Table extends React.Component {
                 const key = this.props.data[0].id.toString() + count.toString();
                 return this.refs[key].offsetWidth;
             });
-            this.setState({headerWidth: widths});
+            this.setState({
+                headerWidth: widths,
+                tableContainer: this.refs.tableContainer.offsetHeight,
+                fixedHeader: this.refs.fixedHeader.offsetHeight,
+                scrollContent: this.refs.scrollContent.offsetHeight
+            });
         }
     }
 
@@ -77,18 +87,29 @@ export default class Table extends React.Component {
     };
 
     render() {
+        console.log('state', this.state);
+        let style = {};
+        if (this.props.width) {
+            style.width = this.props.width;
+        }
+        if (this.props.height) {
+            style.height = this.props.height;
+        }
+        let scrollContentStyle = {};
+        if (this.state.fixedHeader > 0) {
+            scrollContentStyle.height = this.state.tableContainer - this.state.fixedHeader;
+        }
         return (
-            <div id="tableContainer" className="tableContainer">
+            <div ref="tableContainer" className="tableContainer" style={style}>
                 <table
                     border="0"
                     cellPadding="0"
                     cellSpacing="0"
-                    width="100%"
                     className="scrollTable">
-                    <thead className="fixedHeader">
+                    <thead ref="fixedHeader" className="fixedHeader">
                     	<tr>{this.buildHeaders()}</tr>
                     </thead>
-                    <tbody className="scrollContent">
+                    <tbody ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
                         {this.buildRows()}
                     </tbody>
                 </table>

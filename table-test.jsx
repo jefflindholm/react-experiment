@@ -10,7 +10,7 @@ export default class Page extends React.Component {
             {data: 'name', title: 'Name', width: '20%', sortable: true},
             {data: 'city', title: 'City', width: '20%', sortable: true},
             {data: 'zip', title: 'Zip', width: '10%', sortable: true},
-            {data: 'none', title: '', width: '10%', sortable: true},
+            {data: 'none', title: '', sortable: true},
         ];
         this.state = {
             page: 1,
@@ -41,6 +41,8 @@ export default class Page extends React.Component {
                     sort={this.state.sort}
                     sortAsc={this.state.sortAsc}
                     onSort={this.sortChanged}
+                    width="100%"
+                    height="600px"
                 />
             </div>
         )
