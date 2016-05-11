@@ -1,54 +1,8 @@
 import React from 'react';
 import './font-awesome-4.6.2/css/font-awesome.css';
 import './table.css';
-import tableData from './table.json';
 
-export default class Page extends React.Component {
-    constructor(props) {
-        super(props);
-        this.columns = [
-            {data: 'id', title: 'Id', width: '40%'},
-            {data: 'name', title: 'Name', width: '20%', sortable: true},
-            {data: 'city', title: 'City', width: '20%', sortable: true},
-            {data: 'zip', title: 'Zip', width: '10%', sortable: true},
-            {data: 'none', title: '', width: '10%', sortable: true},
-        ];
-        this.state = {
-            page: 1,
-            sort: this.columns[2],
-            sortAsc: true,
-            data: tableData,
-        };
-    }
-    sortChanged = (item) => {
-        let sortAsc = this.state.sortAsc;
-        this.setState({sort: item, sortAsc: (item === this.state.sort ? !sortAsc : true)});
-    };
-    sortItem = (a, b) => {
-        const sortAsc = this.state.sortAsc;
-        if ( a && b ) {
-            return (sortAsc ? 1 : -1) * a[this.state.sort.data].localeCompare(b[this.state.sort.data]);
-        }
-        return (sortAsc ? 1 : -1) * (a ? 1 : -1);
-    }
-    render() {
-        let data = this.state.data;
-        data.sort(this.sortItem);
-        return (
-            <div>
-                <Table
-                    data={data}
-                    columns={this.columns}
-                    sort={this.state.sort}
-                    sortAsc={this.state.sortAsc}
-                    onSort={this.sortChanged}
-                />
-            </div>
-        )
-    }
-}
-
-class Table extends React.Component {
+export default class Table extends React.Component {
     static propTypes = {
         data: React.PropTypes.array.isRequired,
         columns: React.PropTypes.array.isRequired,
@@ -72,7 +26,6 @@ class Table extends React.Component {
             let widths = this.props.columns.map(c => {
                 count++;
                 const key = this.props.data[0].id.toString() + count.toString();
-                console.log(key, this.refs[key].offsetWidth);
                 return this.refs[key].offsetWidth;
             });
             this.setState({headerWidth: widths});
@@ -87,7 +40,6 @@ class Table extends React.Component {
                 const className = `fa fa-sort-alpha-${(this.props.sortAsc ? 'asc' : 'desc')}`;
                 const style = {float: 'right'};
                 title = <span>{title}<span className={className} style={style}></span></span>;
-                console.log('sorted on', c);
             }
             let width = c.width;
             if (this.state.headerWidth.length > 1) {
@@ -125,13 +77,6 @@ class Table extends React.Component {
     };
 
     render() {
-        this.props.columns.map(c => {
-            const key = c.title;
-            if ( this.refs[key] ) {
-                console.log(key, this.refs[key].offsetWidth, '.');
-            }
-        });
-
         return (
             <div id="tableContainer" className="tableContainer">
                 <table
