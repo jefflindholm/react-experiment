@@ -61,7 +61,7 @@ class Pager extends React.Component {
         const pages = Math.round(this.props.pages);
         const {maxShown} = this.props;
         const size = Math.round(pages > maxShown ? maxShown : pages);
-        while ( pagerStart > 1 && (pagerStart + maxShown) > pages) {
+        while ( pagerStart > 1 && (pagerStart + maxShown) > (pages + 1)) {
             pagerStart--;
         }
         let pager = Array.from(Array(size).keys()).map(offset => {
