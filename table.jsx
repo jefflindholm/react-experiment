@@ -93,6 +93,7 @@ class Pager extends React.Component {
         );
     }
 }
+
 export default class Table extends React.Component {
     static propTypes = {
         data: React.PropTypes.array.isRequired,
@@ -106,7 +107,8 @@ export default class Table extends React.Component {
         currentPage: React.PropTypes.number,
         maxShown: React.PropTypes.number,
         pagerStart: React.PropTypes.number,
-        onPage: React.PropTypes.func
+        onPage: React.PropTypes.func,
+        bootstrap: React.PropTypes.bool
     };
     static defaultProps = {
         onSort: function(i) {}
@@ -121,6 +123,7 @@ export default class Table extends React.Component {
             width: 0
         }
     }
+
     componentDidMount() {
         if ( this.state.width < 1 ) {
             this.setState({
@@ -131,11 +134,13 @@ export default class Table extends React.Component {
             });
         }
     }
+
     componentDidUpdate() {
         if ( this.state.headerWidth.length < 1 && this.state.tableContainer > 0) {
             this.measureHeaders();
         }
     }
+
     measureHeaders = () => {
         let count = 0;
         let widths = this.props.columns.map(c => {
@@ -145,6 +150,7 @@ export default class Table extends React.Component {
         });
         this.setState({headerWidth:widths});
     };
+
     buildHeaders = () => {
         let col = 0;
         return this.props.columns.map(c => {
@@ -158,7 +164,7 @@ export default class Table extends React.Component {
             // set the width if we have calculated the columns
             let width = c.width;
             if (this.state.headerWidth.length > 1) {
-                width = this.state.headerWidth[col] - 2;
+                width = this.state.headerWidth[col] - (this.props.bootstrap ? 0 : 2);
             }
             col++;
 
@@ -182,7 +188,7 @@ export default class Table extends React.Component {
             if ( typeof width === 'string') {
                 const index = width.indexOf('%');
                 if (index > 0 && this.state.width) {
-                    width = Number(width.substring(0,index)) * this.state.width / 100;
+                    width = Math.floor(Number(width.substring(0,index)) * this.state.width / 100);
                 }
             }
             const style = { width, textAlign: 'left' };
@@ -245,10 +251,10 @@ export default class Table extends React.Component {
                 : '';
         return (
             <div>
-            <div ref="tableContainer" className="tableContainer" style={style}>
-                {table}
-            </div>
-            {pager}
+                <div ref="tableContainer" className="tableContainer" style={style}>
+                    {table}
+                </div>
+                {pager}
             </div>
         )
     }
