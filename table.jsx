@@ -21,51 +21,75 @@ export default class Table extends React.Component {
             headerWidth: [],
             tableContainer: 0,
             fixedHeader: 0,
-            scrollContent: 0
+            scrollContent: 0,
+            width: 0
         }
     }
     componentDidMount() {
-        console.log('componentDidMount');
-        if ( this.state.headerWidth.length < 1 ) {
-            let count = 0;
-            let widths = this.props.columns.map(c => {
-                count++;
-                const key = this.props.data[0].id.toString() + count.toString();
-                return this.refs[key].offsetWidth;
-            });
+        if ( this.state.width < 1 ) {
             this.setState({
-                headerWidth: widths,
                 tableContainer: this.refs.tableContainer.offsetHeight,
                 fixedHeader: this.refs.fixedHeader.offsetHeight,
-                scrollContent: this.refs.scrollContent.offsetHeight
+                scrollContent: this.refs.scrollContent.offsetHeight,
+                width: this.refs.tableContainer.offsetWidth
             });
         }
     }
-
+    componentDidUpdate() {
+        if ( this.state.headerWidth.length < 1 && this.state.tableContainer > 0) {
+            this.measureHeaders();
+        }
+    }
+    measureHeaders = () => {
+        let count = 0;
+        let widths = this.props.columns.map(c => {
+            count++;
+            const key = this.props.data[0].id.toString() + count.toString();
+            return this.refs[key].offsetWidth;
+        });
+        this.setState({headerWidth:widths});
+    };
     buildHeaders = () => {
         let col = 0;
         return this.props.columns.map(c => {
+            // build the title to include sort info
             let title = c.title;
             if ( this.props.sort === c ) {
                 const className = `fa fa-sort-alpha-${(this.props.sortAsc ? 'asc' : 'desc')}`;
                 const style = {float: 'right'};
                 title = <span>{title}<span className={className} style={style}></span></span>;
             }
+            // set the width if we have calculated the columns
             let width = c.width;
             if (this.state.headerWidth.length > 1) {
                 width = this.state.headerWidth[col] - 2;
             }
             col++;
+
+            if (c.sortable) {
+                title = <a href="#" onClick={this.props.onSort.bind(this, c)}>{title}</a>
+            } else {
+                title = <a href="#">{title}</a>
+            }
             const style = { width: width, textAlign: 'left' };
             return (
-                <th ref={c.title} key={c.title} style={style}><a href="#" onClick={this.props.onSort.bind(this, c)}>{title}</a></th>
+                <th ref={c.title} key={c.title} style={style}>
+                    {title}
+                </th>
             );
         })
     };
     buildRow = (d) => {
         let count = 0;
         return this.props.columns.map(c => {
-            const style = { width: c.width, textAlign: 'left' };
+            let width = c.width||' ';
+            if ( typeof width === 'string') {
+                const index = width.indexOf('%');
+                if (index > 0 && this.state.width) {
+                    width = Number(width.substring(0,index)) * this.state.width / 100;
+                }
+            }
+            const style = { width, textAlign: 'left' };
             count++;
             const key = d.id.toString() + count.toString();
             return (
