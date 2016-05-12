@@ -2,6 +2,97 @@ import React from 'react';
 import './font-awesome-4.6.2/css/font-awesome.css';
 import './table.css';
 
+class Pager extends React.Component {
+    static propTypes = {
+        pages: React.PropTypes.number.isRequired,
+        currentPage: React.PropTypes.number.isRequired,
+        maxShown: React.PropTypes.number.isRequired,
+        pagerStart: React.PropTypes.number.isRequired,
+        onPage: React.PropTypes.func.isRequired
+    }
+    constructor(props) {
+        super(props);
+    }
+
+    pagerForward = () => {
+        const {maxShown, pages} = this.props;
+        let {pagerStart} = this.props;
+        pagerStart += (maxShown - 1);
+        pagerStart = (pagerStart <= pages ? pagerStart : pages);
+        this.props.onPage(pagerStart, pagerStart);
+    };
+
+    pagerBack = () => {
+        const {maxShown} = this.props;
+        let {pagerStart} = this.props;
+        pagerStart -= (maxShown - 1);
+        pagerStart = (pagerStart < 1 ? 1 : pagerStart);
+        this.props.onPage(pagerStart, pagerStart);
+    };
+
+    pageLeft = () => {
+        const {maxShown} = this.props;
+        let {currentPage,pagerStart} = this.props;
+        if ( currentPage > 1 ) {
+            currentPage--;
+            if ( pagerStart > currentPage ) {
+                pagerStart = currentPage;
+            }
+            console.log('pageLeft', currentPage, pagerStart);
+            this.props.onPage(currentPage, pagerStart);
+        }
+    };
+    pageRight = () => {
+        const {maxShown, pages} = this.props;
+        let {currentPage,pagerStart} = this.props;
+        if ( currentPage < pages ) {
+            currentPage++;
+            if ((pagerStart + maxShown) <= currentPage ) {
+                pagerStart = currentPage;
+            }
+            console.log('pageRight', currentPage, pagerStart);
+            this.props.onPage(currentPage, pagerStart);
+        }
+    };
+
+    render() {
+        console.log('render', this.props);
+        let {pagerStart} = this.props;
+        const pages = Math.round(this.props.pages);
+        const {maxShown} = this.props;
+        const size = Math.round(pages > maxShown ? maxShown : pages);
+        while ( pagerStart > 1 && (pagerStart + maxShown) > pages) {
+            pagerStart--;
+        }
+        let pager = Array.from(Array(size).keys()).map(offset => {
+            const page = offset + pagerStart;
+            const className = page === (this.props.currentPage) ? 'active' : '';
+            return (
+                <li key={page}>
+                    <a className={className} onClick={this.props.onPage.bind(this, page, pagerStart)}>{page}</a>
+                </li>
+            );
+        });
+        if ( pages > maxShown ) {
+            if ( pagerStart > 1 ) {
+                pager.unshift(<li key={'back'} ><a onClick={this.pagerBack}>...</a></li>);
+            }
+            if (pagerStart + maxShown <= pages ) {
+                pager.push(<li key={'forward'}><a onClick={this.pagerForward}>...</a></li>);
+            }
+        }
+
+        return (
+            <div className="center">
+                <ul className="pagination">
+                    <li><a onClick={this.pageLeft}>«</a></li>
+                    {pager}
+                    <li><a onClick={this.pageRight}>»</a></li>
+                </ul>
+            </div>
+        );
+    }
+}
 export default class Table extends React.Component {
     static propTypes = {
         data: React.PropTypes.array.isRequired,
@@ -10,7 +101,12 @@ export default class Table extends React.Component {
         sortAsc: React.PropTypes.bool,
         onSort: React.PropTypes.func,
         width: React.PropTypes.string,
-        height: React.PropTypes.string
+        height: React.PropTypes.string,
+        pages: React.PropTypes.number,
+        currentPage: React.PropTypes.number,
+        maxShown: React.PropTypes.number,
+        pagerStart: React.PropTypes.number,
+        onPage: React.PropTypes.func
     };
     static defaultProps = {
         onSort: function(i) {}
@@ -111,7 +207,6 @@ export default class Table extends React.Component {
     };
 
     render() {
-        console.log('state', this.state);
         let style = {};
         if (this.props.width) {
             style.width = this.props.width;
@@ -123,20 +218,37 @@ export default class Table extends React.Component {
         if (this.state.fixedHeader > 0) {
             scrollContentStyle.height = this.state.tableContainer - this.state.fixedHeader;
         }
+        const table = (
+            <table
+                border="0"
+                cellPadding="0"
+                cellSpacing="0"
+                className="scrollTable">
+                <thead ref="fixedHeader" className="fixedHeader">
+                    <tr>{this.buildHeaders()}</tr>
+                </thead>
+                <tbody ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
+                    {this.buildRows()}
+                </tbody>
+            </table>
+        );
+        const pager = this.props.pages && this.props.pages > 1
+                ? (
+                    <Pager
+                        pages={this.props.pages}
+                        currentPage={this.props.currentPage}
+                        maxShown={this.props.maxShown}
+                        pagerStart={this.props.pagerStart}
+                        onPage={this.props.onPage}
+                    />
+                )
+                : '';
         return (
+            <div>
             <div ref="tableContainer" className="tableContainer" style={style}>
-                <table
-                    border="0"
-                    cellPadding="0"
-                    cellSpacing="0"
-                    className="scrollTable">
-                    <thead ref="fixedHeader" className="fixedHeader">
-                    	<tr>{this.buildHeaders()}</tr>
-                    </thead>
-                    <tbody ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
-                        {this.buildRows()}
-                    </tbody>
-                </table>
+                {table}
+            </div>
+            {pager}
             </div>
         )
     }
