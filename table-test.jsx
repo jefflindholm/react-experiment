@@ -1,6 +1,8 @@
 import React from 'react';
 import tableData from './table-test.json';
 import Table from './table';
+import './node_modules/bootstrap/dist/css/bootstrap.css';
+
 
 export default class Page extends React.Component {
     constructor(props) {
@@ -75,6 +77,7 @@ export default class Page extends React.Component {
                     onSort={this.sortChanged}
                     width="100%"
                     height="300px"
+                    bootstrap={true}
                 />
                 <Table
                     data={this.state.pageData}
@@ -89,6 +92,7 @@ export default class Page extends React.Component {
                     onPage={this.onPage}
                     width="100%"
                     height="300px"
+                    bootstrap={true}
                 />
             </div>
         )
