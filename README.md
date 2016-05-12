@@ -1,5 +1,6 @@
 clone this repo
 ```
+npm install
 npm install -g react-heatpack
 ```
 heatpack <file>

@@ -3,7 +3,6 @@ import tableData from './table-test.json';
 import Table from './table';
 import './node_modules/bootstrap/dist/css/bootstrap.css';
 
-
 export default class Page extends React.Component {
     constructor(props) {
         super(props);
@@ -17,30 +16,30 @@ export default class Page extends React.Component {
         ];
         this.sortAsc = true;
         this.sort = this.columns[2];
-        let data = tableData.sort(this.sortItem);
+        const data = tableData.sort(this.sortItem);
 
         this.state = {
             page: 1,
             sort: this.columns[2],
             sortAsc: true,
-            data: data,
+            data,
             pagerStart: 1,
-            pageData: data.slice(0, 50)
+            pageData: data.slice(0, 50),
         };
     }
     sortChanged = (item) => {
-        let sortAsc = this.state.sortAsc;
+        const sortAsc = this.state.sortAsc;
         this.sortAsc = (item === this.state.sort ? !sortAsc : true);
         this.sort = item;
-        let data = this.state.data.sort(this.sortItem);
+        const data = this.state.data.sort(this.sortItem);
 
         const {page} = this.state;
 
         this.setState({
             sort: item,
             sortAsc: this.sortAsc,
-            data: data,
-            pageData: this.state.data.slice((page-1)*50, page*50)
+            data,
+            pageData: this.state.data.slice((page - 1) * 50, page * 50),
         });
     };
     sortItem = (a, b) => {
@@ -62,8 +61,9 @@ export default class Page extends React.Component {
 
     onPage = (page, pagerStart) => {
         this.setState({
-            pagerStart, page,
-            pageData: this.state.data.slice((page-1)*50, page*50)
+            pagerStart,
+            page,
+            pageData: this.state.data.slice((page - 1) * 50, page * 50),
         });
     };
     render() {

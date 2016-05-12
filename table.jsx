@@ -1,6 +1,6 @@
 // react-heatpack
 import React from 'react';
-import './font-awesome-4.6.2/css/font-awesome.css';
+import './node_modules/font-awesome/css/font-awesome.css';
 import './table.css';
 
 class Pager extends React.Component {
@@ -9,10 +9,7 @@ class Pager extends React.Component {
         currentPage: React.PropTypes.number.isRequired,
         maxShown: React.PropTypes.number.isRequired,
         pagerStart: React.PropTypes.number.isRequired,
-        onPage: React.PropTypes.func.isRequired
-    }
-    constructor(props) {
-        super(props);
+        onPage: React.PropTypes.func.isRequired,
     }
 
     pagerForward = () => {
@@ -32,7 +29,6 @@ class Pager extends React.Component {
     };
 
     pageLeft = () => {
-        const {maxShown} = this.props;
         let {currentPage,pagerStart} = this.props;
         if ( currentPage > 1 ) {
             currentPage--;
@@ -109,10 +105,10 @@ export default class Table extends React.Component {
         maxShown: React.PropTypes.number,
         pagerStart: React.PropTypes.number,
         onPage: React.PropTypes.func,
-        bootstrap: React.PropTypes.bool
+        bootstrap: React.PropTypes.bool,
     };
     static defaultProps = {
-        onSort: function(i) {}
+        onSort: function(i) {},
     };
     constructor(props) {
         super(props);
@@ -121,7 +117,7 @@ export default class Table extends React.Component {
             tableContainer: 0,
             fixedHeader: 0,
             scrollContent: 0,
-            width: 0
+            width: 0,
         }
     }
 
@@ -131,7 +127,7 @@ export default class Table extends React.Component {
                 tableContainer: this.refs.tableContainer.offsetHeight,
                 fixedHeader: this.refs.fixedHeader.offsetHeight,
                 scrollContent: this.refs.scrollContent.offsetHeight,
-                width: this.refs.tableContainer.offsetWidth
+                width: this.refs.tableContainer.offsetWidth,
             });
         }
     }
@@ -144,7 +140,7 @@ export default class Table extends React.Component {
 
     measureHeaders = () => {
         let count = 0;
-        let widths = this.props.columns.map(c => {
+        const widths = this.props.columns.map(c => {
             count++;
             const key = this.props.data[0].id.toString() + count.toString();
             return this.refs[key].offsetWidth;
@@ -174,7 +170,7 @@ export default class Table extends React.Component {
             } else {
                 title = <a href="#">{title}</a>
             }
-            const style = { width: width, textAlign: 'left' };
+            const style = { width, textAlign: 'left' };
             return (
                 <th ref={c.title} key={c.title} style={style}>
                     {title}
@@ -185,7 +181,7 @@ export default class Table extends React.Component {
     buildRow = (d) => {
         let count = 0;
         return this.props.columns.map(c => {
-            let width = c.width||' ';
+            let width = c.width || ' ';
             if ( typeof width === 'string') {
                 const index = width.indexOf('%');
                 if (index > 0 && this.state.width) {
