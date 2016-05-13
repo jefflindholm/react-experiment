@@ -44,6 +44,7 @@ export default class Table extends React.Component {
             const key = this.props.data[0].id.toString() + count.toString();
             return this.refs[key].offsetWidth;
         });
+        console.log('this.refs.tableHeader.offsetHeight', this.refs.tableHeader.offsetHeight);
         this.setState({
             headerWidth:widths,
             header: this.refs.tableHeader.offsetHeight,
@@ -52,6 +53,10 @@ export default class Table extends React.Component {
     resize = () => {
         this.measure();
     };
+    headerClick = (e) => {
+        console.log('headerClick', e);
+        this.props.onSort(e);
+    }
     buildHeaders = () => {
         let col = 0;
         return this.props.columns.map(c => {
@@ -71,7 +76,7 @@ export default class Table extends React.Component {
             col++;
 
             if (c.sortable) {
-                title = <a href="#" onClick={this.props.onSort.bind(this, c)}>{title}</a>
+                title = <a href="#" onClick={this.headerClick.bind(null, c)}>{title}</a>
             } else {
                 title = <a href="#">{title}</a>
             }
@@ -121,7 +126,6 @@ export default class Table extends React.Component {
             const height = Number(this.props.height.substring(0,offset));
             scrollContentStyle.height = `${height - (this.state.header || 26)}px`;
         }
-        console.log('scrollContentStyle', scrollContentStyle);
         const table = (
             <div className="div-table"
                 border="0"

@@ -9,6 +9,7 @@
     display: table-row;
     background-color: green;
     resize: horizontal;
+    height: 26px;
 }
 .div-table-row {
     display: table-row;
@@ -24,7 +25,24 @@
 }
 .div-table-col > a {
 	color: #000;
-	font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif
+	font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+.div-table-col > a, .div-table-col > a:link, .div-table-col > a:visited {
+    color: #000;
+	display: block;
+	text-decoration: none;
+	width: 100%
+}
+
+.div-table-col > a:hover {
+    color: #000;
+	display: block;
+	text-decoration: underline;
+	width: 100%
 }
 .normalRow {
 	background: #FFF;

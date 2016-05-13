@@ -84,6 +84,7 @@ export default class Page extends React.Component {
                     height="300px"
                     bootstrap={bootstrap}
                 />
+                <div style={{height: '20px'}}></div>
                 <Table
                     data={this.state.pageData}
                     columns={this.columns}
