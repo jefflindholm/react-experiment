@@ -10,6 +10,7 @@
     background-color: green;
     resize: horizontal;
     height: 26px;
+    border: 1px solid black;
 }
 .div-table-row {
     display: table-row;

@@ -1,7 +1,8 @@
 import React from 'react';
 import tableData from './table-test.json';
 //import Table from './table';
-import Table from './table-div';
+import TableDiv from './table-div';
+import Table from './table';
 import './node_modules/bootstrap/dist/css/bootstrap.css';
 const bootstrap = true;
 
@@ -86,6 +87,35 @@ export default class Page extends React.Component {
                 />
                 <div style={{height: '20px'}}></div>
                 <Table
+                    data={this.state.pageData}
+                    columns={this.columns}
+                    sort={this.state.sort}
+                    sortAsc={this.state.sortAsc}
+                    onSort={this.sortChanged}
+                    pages={Math.floor(this.state.data.length / 50) + 1}
+                    currentPage={this.state.page}
+                    maxShown={3}
+                    pagerStart={this.state.pagerStart}
+                    onPage={this.onPage}
+                    width="100%"
+                    height="300px"
+                    bootstrap={bootstrap}
+                />
+                <div style={{height: '20px'}}></div>
+                <div style={{height: '20px'}}>DIVS</div>
+                <div style={{height: '20px'}}></div>
+                <TableDiv
+                    data={this.state.data}
+                    columns={this.columns}
+                    sort={this.state.sort}
+                    sortAsc={this.state.sortAsc}
+                    onSort={this.sortChanged}
+                    width="100%"
+                    height="300px"
+                    bootstrap={bootstrap}
+                />
+                <div style={{height: '20px'}}></div>
+                <TableDiv
                     data={this.state.pageData}
                     columns={this.columns}
                     sort={this.state.sort}

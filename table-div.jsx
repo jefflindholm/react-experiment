@@ -42,7 +42,9 @@ export default class Table extends React.Component {
         const widths = this.props.columns.map(c => {
             count++;
             const key = this.props.data[0].id.toString() + count.toString();
-            return this.refs[key].offsetWidth;
+            // the base object has an offset of 1, so make the first column header
+            // 1 px wider
+            return this.refs[key].offsetWidth + (count === 1 ? 1 : 0);
         });
         console.log('this.refs.tableHeader.offsetHeight', this.refs.tableHeader.offsetHeight);
         this.setState({
@@ -70,6 +72,7 @@ export default class Table extends React.Component {
             // set the width if we have calculated the columns
             let width = c.width;
             if (this.state.headerWidth) {
+                // bootstrap has some padding by default
                 width = this.state.headerWidth[col] - (this.props.bootstrap ? 0 : 2);
             }
 
@@ -91,7 +94,7 @@ export default class Table extends React.Component {
     buildRow = (d) => {
         let count = 0;
         return this.props.columns.map(c => {
-            const width = c.width || ' ';
+            const width = (c.width || ' ');
             const style = { width, textAlign: 'left' };
             count++;
             const key = d.id.toString() + count.toString();
