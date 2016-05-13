@@ -2,6 +2,7 @@ import React from 'react';
 import tableData from './table-test.json';
 import Table from './table';
 import './node_modules/bootstrap/dist/css/bootstrap.css';
+const bootstrap = true;
 
 export default class Page extends React.Component {
     constructor(props) {
@@ -67,8 +68,11 @@ export default class Page extends React.Component {
         });
     };
     render() {
+        const className = bootstrap ? "col-md-8 col-md-offset-2" : "center";
+        const style = bootstrap ? {} : {width: '600px'};
+
         return (
-            <div>
+            <div style={style} className={className}>
                 <Table
                     data={this.state.data}
                     columns={this.columns}
@@ -77,7 +81,7 @@ export default class Page extends React.Component {
                     onSort={this.sortChanged}
                     width="100%"
                     height="300px"
-                    bootstrap={true}
+                    bootstrap={bootstrap}
                 />
                 <Table
                     data={this.state.pageData}
@@ -92,7 +96,7 @@ export default class Page extends React.Component {
                     onPage={this.onPage}
                     width="100%"
                     height="300px"
-                    bootstrap={true}
+                    bootstrap={bootstrap}
                 />
             </div>
         )

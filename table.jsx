@@ -35,7 +35,6 @@ class Pager extends React.Component {
             if ( pagerStart > currentPage ) {
                 pagerStart = currentPage;
             }
-            console.log('pageLeft', currentPage, pagerStart);
             this.props.onPage(currentPage, pagerStart);
         }
     };
@@ -47,13 +46,11 @@ class Pager extends React.Component {
             if ((pagerStart + maxShown) <= currentPage ) {
                 pagerStart = currentPage;
             }
-            console.log('pageRight', currentPage, pagerStart);
             this.props.onPage(currentPage, pagerStart);
         }
     };
 
     render() {
-        console.log('render', this.props);
         let {pagerStart} = this.props;
         const pages = Math.round(this.props.pages);
         const {maxShown} = this.props;
@@ -108,7 +105,7 @@ export default class Table extends React.Component {
         bootstrap: React.PropTypes.bool,
     };
     static defaultProps = {
-        onSort: function(i) {},
+        onSort: (i) => {},
     };
     constructor(props) {
         super(props);
@@ -120,24 +117,32 @@ export default class Table extends React.Component {
             width: 0,
         }
     }
-
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize);
+    }
     componentDidMount() {
+        window.addEventListener('resize', this.resize);
         if ( this.state.width < 1 ) {
-            this.setState({
-                tableContainer: this.refs.tableContainer.offsetHeight,
-                fixedHeader: this.refs.fixedHeader.offsetHeight,
-                scrollContent: this.refs.scrollContent.offsetHeight,
-                width: this.refs.tableContainer.offsetWidth,
-            });
+            this.measure();
         }
     }
-
     componentDidUpdate() {
         if ( this.state.headerWidth.length < 1 && this.state.tableContainer > 0) {
             this.measureHeaders();
         }
     }
-
+    resize = () => {
+        this.measure();
+    };
+    measure = () => {
+        this.setState({
+            headerWidth: [],
+            tableContainer: this.refs.tableContainer.offsetHeight,
+            fixedHeader: this.refs.fixedHeader.offsetHeight,
+            scrollContent: this.refs.scrollContent.offsetHeight,
+            width: this.refs.tableContainer.offsetWidth,
+        });
+    };
     measureHeaders = () => {
         let count = 0;
         const widths = this.props.columns.map(c => {
@@ -147,7 +152,6 @@ export default class Table extends React.Component {
         });
         this.setState({headerWidth:widths});
     };
-
     buildHeaders = () => {
         let col = 0;
         return this.props.columns.map(c => {
@@ -208,7 +212,6 @@ export default class Table extends React.Component {
             );
         });
     };
-
     render() {
         let style = {};
         if (this.props.width) {

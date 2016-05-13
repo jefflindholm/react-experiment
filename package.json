@@ -19,8 +19,7 @@
     "eslint": "^2.9.0",
     "eslint-plugin-react": "^5.1.1",
     "font-awesome": "^4.6.1",
-    "jscs": "^3.0.3",
-    "react": "^15.0.2"
+    "jscs": "^3.0.3"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4"
