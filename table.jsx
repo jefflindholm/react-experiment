@@ -45,7 +45,7 @@ export default class Table extends React.Component {
     }
     componentDidUpdate() {
         if ( this.state.headerWidth.length < 1 && this.state.tableContainer > 0) {
-            this.measureHeaders();
+            this.measureFirstRow();
         }
     }
     resize = () => {
@@ -60,7 +60,7 @@ export default class Table extends React.Component {
             width: this.refs.tableContainer.offsetWidth,
         });
     };
-    measureHeaders = () => {
+    measureFirstRow = () => {
         let count = 0;
         const widths = this.props.columns.map(c => {
             count++;

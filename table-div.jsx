@@ -27,6 +27,7 @@ export default class Table extends React.Component {
         super(props);
         this.state = {
             header: null,
+            headerWidth: null,
         };
     }
     componentWillUnmount() {
@@ -34,9 +35,22 @@ export default class Table extends React.Component {
     }
     componentDidMount() {
         window.addEventListener('resize', this.resize);
-        this.setState({header: this.refs.tableHeader.offsetHeight});
+        this.measure();
     }
+    measure = () => {
+        let count = 0;
+        const widths = this.props.columns.map(c => {
+            count++;
+            const key = this.props.data[0].id.toString() + count.toString();
+            return this.refs[key].offsetWidth;
+        });
+        this.setState({
+            headerWidth:widths,
+            header: this.refs.tableHeader.offsetHeight,
+        });
+    };
     resize = () => {
+        this.measure();
     };
     buildHeaders = () => {
         let col = 0;
@@ -49,7 +63,11 @@ export default class Table extends React.Component {
                 title = <span>{title}<span className={className} style={style}></span></span>;
             }
             // set the width if we have calculated the columns
-            const width = c.width;
+            let width = c.width;
+            if (this.state.headerWidth) {
+                width = this.state.headerWidth[col] - (this.props.bootstrap ? 0 : 2);
+            }
+
             col++;
 
             if (c.sortable) {
