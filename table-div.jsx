@@ -1,7 +1,7 @@
 // react-heatpack
 import React from 'react';
 import './node_modules/font-awesome/css/font-awesome.css';
-import './table.css';
+import './table-div.css';
 import Pager from './pager';
 
 export default class Table extends React.Component {
@@ -59,15 +59,6 @@ export default class Table extends React.Component {
             width: this.refs.tableContainer.offsetWidth,
         });
     };
-    measureHeaders = () => {
-        let count = 0;
-        const widths = this.props.columns.map(c => {
-            count++;
-            const key = this.props.data[0].id.toString() + count.toString();
-            return this.refs[key].offsetWidth;
-        });
-        this.setState({headerWidth:widths});
-    };
     buildHeaders = () => {
         let col = 0;
         return this.props.columns.map(c => {
@@ -92,9 +83,9 @@ export default class Table extends React.Component {
             }
             const style = { width, textAlign: 'left' };
             return (
-                <th ref={c.title} key={c.title} style={style}>
+                <div ref={c.title} key={c.title} style={style}>
                     {title}
-                </th>
+                </div>
             );
         })
     };
@@ -112,7 +103,7 @@ export default class Table extends React.Component {
             count++;
             const key = d.id.toString() + count.toString();
             return (
-                <td ref={key} key={key} style={style}>{d[c.data]}</td>
+                <div ref={key} key={key} style={style}>{d[c.data]}</div>
             );
         });
     };
@@ -122,9 +113,9 @@ export default class Table extends React.Component {
         let count = 1;
         return this.props.data.map(i => {
             return (
-                <tr key={count} className={count++ % 2 === 0 ? even : odd}>
+                <div key={count} className={count++ % 2 === 0 ? even : odd}>
                     {this.buildRow(i)}
-                </tr>
+                </div>
             );
         });
     };
@@ -141,18 +132,18 @@ export default class Table extends React.Component {
             scrollContentStyle.height = this.state.tableContainer - this.state.fixedHeader;
         }
         const table = (
-            <table
+            <div
                 border="0"
                 cellPadding="0"
                 cellSpacing="0"
                 className="scrollTable">
-                <thead ref="fixedHeader" className="fixedHeader">
-                    <tr>{this.buildHeaders()}</tr>
-                </thead>
-                <tbody ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
+                <div ref="fixedHeader" className="fixedHeader">
+                    <div>{this.buildHeaders()}</div>
+                </div>
+                <div ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
                     {this.buildRows()}
-                </tbody>
-            </table>
+                </div>
+            </div>
         );
         const pager = this.props.pages && this.props.pages > 1
                 ? (

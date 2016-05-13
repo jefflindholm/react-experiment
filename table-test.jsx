@@ -1,6 +1,7 @@
 import React from 'react';
 import tableData from './table-test.json';
-import Table from './table';
+//import Table from './table';
+import Table from './table-div';
 import './node_modules/bootstrap/dist/css/bootstrap.css';
 const bootstrap = true;
 
