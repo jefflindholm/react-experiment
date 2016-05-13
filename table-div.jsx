@@ -23,41 +23,13 @@ export default class Table extends React.Component {
     static defaultProps = {
         onSort: (i) => {},
     };
-    constructor(props) {
-        super(props);
-        this.state = {
-            headerWidth: [],
-            tableContainer: 0,
-            fixedHeader: 0,
-            scrollContent: 0,
-            width: 0,
-        }
-    }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize);
     }
     componentDidMount() {
         window.addEventListener('resize', this.resize);
-        if ( this.state.width < 1 ) {
-            this.measure();
-        }
-    }
-    componentDidUpdate() {
-        if ( this.state.headerWidth.length < 1 && this.state.tableContainer > 0) {
-            this.measureHeaders();
-        }
     }
     resize = () => {
-        this.measure();
-    };
-    measure = () => {
-        this.setState({
-            headerWidth: [],
-            tableContainer: this.refs.tableContainer.offsetHeight,
-            fixedHeader: this.refs.fixedHeader.offsetHeight,
-            scrollContent: this.refs.scrollContent.offsetHeight,
-            width: this.refs.tableContainer.offsetWidth,
-        });
     };
     buildHeaders = () => {
         let col = 0;
@@ -70,10 +42,7 @@ export default class Table extends React.Component {
                 title = <span>{title}<span className={className} style={style}></span></span>;
             }
             // set the width if we have calculated the columns
-            let width = c.width;
-            if (this.state.headerWidth.length > 1) {
-                width = this.state.headerWidth[col] - (this.props.bootstrap ? 0 : 2);
-            }
+            const width = c.width;
             col++;
 
             if (c.sortable) {
@@ -83,7 +52,7 @@ export default class Table extends React.Component {
             }
             const style = { width, textAlign: 'left' };
             return (
-                <div ref={c.title} key={c.title} style={style}>
+                <div className="div-table-col" ref={c.title} key={c.title} style={style}>
                     {title}
                 </div>
             );
@@ -92,18 +61,12 @@ export default class Table extends React.Component {
     buildRow = (d) => {
         let count = 0;
         return this.props.columns.map(c => {
-            let width = c.width || ' ';
-            if ( typeof width === 'string') {
-                const index = width.indexOf('%');
-                if (index > 0 && this.state.width) {
-                    width = Math.floor(Number(width.substring(0,index)) * this.state.width / 100);
-                }
-            }
+            const width = c.width || ' ';
             const style = { width, textAlign: 'left' };
             count++;
             const key = d.id.toString() + count.toString();
             return (
-                <div ref={key} key={key} style={style}>{d[c.data]}</div>
+                <div className="div-table-col" ref={key} key={key} style={style}>{d[c.data]}</div>
             );
         });
     };
@@ -113,7 +76,7 @@ export default class Table extends React.Component {
         let count = 1;
         return this.props.data.map(i => {
             return (
-                <div key={count} className={count++ % 2 === 0 ? even : odd}>
+                <div key={count} className={`div-table-row ${(count++ % 2 === 0 ? even : odd)}`}>
                     {this.buildRow(i)}
                 </div>
             );
@@ -128,19 +91,16 @@ export default class Table extends React.Component {
             style.height = this.props.height;
         }
         let scrollContentStyle = {};
-        if (this.state.fixedHeader > 0) {
-            scrollContentStyle.height = this.state.tableContainer - this.state.fixedHeader;
-        }
         const table = (
-            <div
+            <div className="div-table"
                 border="0"
                 cellPadding="0"
                 cellSpacing="0"
                 className="scrollTable">
-                <div ref="fixedHeader" className="fixedHeader">
-                    <div>{this.buildHeaders()}</div>
+                <div className="div-table-row">
+                    {this.buildHeaders()}
                 </div>
-                <div ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
+                <div ref="scrollContent" style={scrollContentStyle}>
                     {this.buildRows()}
                 </div>
             </div>
