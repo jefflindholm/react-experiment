@@ -23,11 +23,18 @@ export default class Table extends React.Component {
     static defaultProps = {
         onSort: (i) => {},
     };
+    constructor(props) {
+        super(props);
+        this.state = {
+            header: null,
+        };
+    }
     componentWillUnmount() {
         window.removeEventListener('resize', this.resize);
     }
     componentDidMount() {
         window.addEventListener('resize', this.resize);
+        this.setState({header: this.refs.tableHeader.offsetHeight});
     }
     resize = () => {
     };
@@ -84,23 +91,29 @@ export default class Table extends React.Component {
     };
     render() {
         let style = {};
+        let scrollContentStyle = {};
         if (this.props.width) {
             style.width = this.props.width;
+            scrollContentStyle.width = this.props.width;
         }
         if (this.props.height) {
             style.height = this.props.height;
+            let offset = style.height.indexOf('px');
+            offset = offset === -1 ? style.height.length : offset;
+            const height = Number(this.props.height.substring(0,offset));
+            scrollContentStyle.height = `${height - (this.state.header || 26)}px`;
         }
-        let scrollContentStyle = {};
+        console.log('scrollContentStyle', scrollContentStyle);
         const table = (
             <div className="div-table"
                 border="0"
                 cellPadding="0"
                 cellSpacing="0"
                 className="scrollTable">
-                <div className="div-table-row">
+                <div className="div-table-header" ref="tableHeader">
                     {this.buildHeaders()}
                 </div>
-                <div ref="scrollContent" style={scrollContentStyle}>
+                <div ref="scrollContent" className="scrollContent" style={scrollContentStyle}>
                     {this.buildRows()}
                 </div>
             </div>

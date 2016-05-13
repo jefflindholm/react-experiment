@@ -5,17 +5,38 @@
   border:1px solid  #666666;
   border-spacing:5px;/*cellspacing:poor IE support for  this*/
 }
-.div-table-row{
-  display:table-row;
-  width:auto;
-  clear:both;
+.div-table-header {
+    display: table-row;
+    background-color: green;
+    resize: horizontal;
 }
-.div-table-col{
-  float:left;/*fix for  buggy browsers*/
-  display:table-column;
-  width:200px;
-  background-color:#ccc;
+.div-table-row {
+    display: table-row;
+    background-color: green;
+    resize: horizontal;
 }
-.scrollcontent {
-    display: block;
+.div-table-col {
+    border-right: 1px solid black;
+    display: table-cell;
+    padding: 2px 3px;
+    text-align: left;
+    vertical-align: middle;
+}
+.div-table-col > a {
+	color: #000;
+	font: normal normal 12px Verdana, Geneva, Arial, Helvetica, sans-serif
+}
+.normalRow {
+	background: #FFF;
+	border-right: 1px solid #CCC;
+}
+
+.alternateRow {
+	background: #EEE;
+	border-right: 1px solid #CCC;
+}
+
+.scrollContent {
+    overflow-y: auto;
+    border: 1px solid black;
 }

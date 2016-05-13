@@ -69,7 +69,7 @@ export default class Page extends React.Component {
         });
     };
     render() {
-        const className = bootstrap ? "col-md-8 col-md-offset-2" : "center";
+        const className = bootstrap ? 'col-md-8 col-md-offset-2' : 'center';
         const style = bootstrap ? {} : {width: '600px'};
 
         return (
