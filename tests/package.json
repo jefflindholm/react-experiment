@@ -1,0 +1,31 @@
+{
+  "name": "experimental",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint *.jsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/Team-Lindholm/experimental.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Team-Lindholm/experimental#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "eslint": "^2.9.0",
+    "eslint-plugin-react": "^5.1.1",
+    "font-awesome": "^4.6.1",
+    "jscs": "^3.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0"
+  }
+}
