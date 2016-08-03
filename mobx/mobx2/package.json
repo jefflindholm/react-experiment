@@ -1,0 +1,19 @@
+{
+  "name": "mobx2",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jeff Lindholm <jeff@lindholm.org>",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "eslint": "^3.2.2",
+    "eslint-plugin-react": "^6.0.0",
+    "mobx": "^2.4.1",
+    "mobx-react": "^3.5.3",
+    "mobx-react-devtools": "^4.2.4"
+  }
+}
